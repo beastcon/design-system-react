@@ -193,6 +193,10 @@ class DataTable extends React.Component {
 		 */
 		onToggleFixedHeaderListeners: PropTypes.func,
 		/**
+		 * Provides a function to wrap the DataTableRow with. 
+		 */
+		checkTableRowWrapper: PropTypes.func,
+		/**
 		 * An array of objects of selected rows. See `items` prop for shape of objects.
 		 */
 		selection: PropTypes.array,
@@ -370,6 +374,13 @@ class DataTable extends React.Component {
 		}
 	};
 
+	checkTableRowWrapper = (toWrap) => {
+		if (this.props.tableRowWrapper) {
+			this.props.tableRowWrapper(toWrap);
+		}
+	};
+
+
 	toggleFixedHeaderListeners = (attach) => {
 		if (this.props.onToggleFixedHeaderListeners) {
 			this.props.onToggleFixedHeaderListeners(
@@ -537,7 +548,7 @@ class DataTable extends React.Component {
 											? `${this.getId()}-${DATA_TABLE_ROW}-${item.id}`
 											: shortid.generate();
 									return (
-										<DataTableRow
+										checkTableRowWrapper(<DataTableRow
 											assistiveText={assistiveText}
 											canSelectRows={canSelectRows}
 											className={item.classNameRow}
@@ -551,7 +562,7 @@ class DataTable extends React.Component {
 											selection={this.props.selection}
 											rowActions={RowActions}
 											tableId={this.getId()}
-										/>
+										/>);
 									);
 							  })
 							: // Someday this should be an element to render when the table is empty
